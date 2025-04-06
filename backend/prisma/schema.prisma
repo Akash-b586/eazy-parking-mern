@@ -11,7 +11,6 @@ datasource db {
 model Admin {
   id            String      @id @default(uuid()) @db.Char(36)
   adminName     String?     @map("AdminName") @db.VarChar(120)
-  userName      String?     @map("UserName") @db.VarChar(120)
   mobileNumber  String?     @map("MobileNumber") @db.VarChar(20)
   email         String?     @unique @db.VarChar(200)
   password      String?     @db.VarChar(120)
@@ -49,12 +48,13 @@ model Category {
 model ParkingLot {
   id          String     @id @default(uuid()) @db.Char(36)
   adminId     String     @map("admin_id") @db.Char(36)
-  city        String     @db.VarChar(250)
+  location    String     @db.VarChar(250)
   totalSlot   Int        @map("totalSlot")
   bookedSlot  Int        @map("bookedSlot")
   price       Int        @db.Int
   admin       Admin      @relation(fields: [adminId], references: [id])
   bookings    Booking[]
+  imgUrl      String    @map("imgUrl") @db.VarChar(250)
 
   @@map("parkinglot")
 }

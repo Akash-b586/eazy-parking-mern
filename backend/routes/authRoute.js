@@ -36,10 +36,12 @@ router.post('/register', async (req, res) => {
             },
         });
 
+        const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
+
         // Hide sensitive fields in response
         const { password: _, ...userWithoutPassword } = newUser;
 
-        res.status(201).json({ message: 'User created successfully', user: userWithoutPassword });
+        res.status(201).json({ message: 'User created successfully', token, user: userWithoutPassword });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
@@ -68,7 +70,7 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN });
 
         const { password: _, ...userWithoutPassword } = user;
 
