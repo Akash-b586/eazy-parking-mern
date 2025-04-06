@@ -5,6 +5,7 @@ import authRoute from './routes/authRoute.js'
 import getLocationsRoute from './routes/getParkingLot.js'
 import adminAuthRoute from './routes/admin/authRoute.js'
 import addParkingLotRoute from './routes/admin/addParkingLot.js'
+import getPastBookingsRoute from './routes/user/getPastBookings.js'
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use('/api/auth', authRoute)
 app.use('/api/locations', getLocationsRoute);
 app.use('/api/admin/addParkingLot', addParkingLotRoute);
 app.use('/api/admin/auth', adminAuthRoute);
+app.use('/api/user/getPastBookings', getPastBookingsRoute);
 
 app.get('/', (req, res) => {
     res.send('Hello, World! pyaaare kushagra');

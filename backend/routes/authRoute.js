@@ -81,4 +81,54 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Frogot Password Route
+router.post('/forgot-password', async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({ message: 'Email required' });
+    }
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: { email },
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'User not found' });
+        }
+
+        // Send email with reset link (pseudo code)
+        // const resetLink = `${process.env.FRONTEND_URL}/reset-password/${user.id}`;
+
+        res.json({ message: 'Password reset link sent to your email' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Reset Password Route
+// router.post('/reset-password', async (req, res) => {
+//     const { userId, newPassword } = req.body;
+
+//     if (!userId || !newPassword) {
+//         return res.status(400).json({ message: 'User ID and new password required' });
+//     }
+
+//     try {
+//         const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+//         await prisma.user.update({
+//             where: { id: userId },
+//             data: { password: hashedPassword },
+//         });
+
+//         res.json({ message: 'Password updated successfully' });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Server error' });
+//     }
+// });
+
 export default router;

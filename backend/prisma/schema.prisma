@@ -25,7 +25,7 @@ model User {
   firstName    String?    @map("FirstName") @db.VarChar(250)
   lastName     String?    @map("LastName") @db.VarChar(250)
   mobileNumber String?    @map("MobileNumber") @db.VarChar(20)
-  email        String?    @unique @db.VarChar(250)  // 👈 Add @unique here
+  email        String?    @unique @db.VarChar(250)
   password     String?    @db.VarChar(250)
   regDate      DateTime?  @default(now()) @map("RegDate") @db.Timestamp(0)
   bookings     Booking[]
@@ -37,9 +37,8 @@ model User {
 // Category Model
 model Category {
   id           String     @id @default(uuid()) @db.Char(36)
-  vehicleCat   String?    @unique @map("VehicleCat") @db.VarChar(120)
+  vehicleCat   String     @map("VehicleCat") @db.VarChar(120)
   creationDate DateTime?  @default(now()) @map("CreationDate") @db.Timestamp(0)
-  vehicles     Vehicle[]
 
   @@map("tblcategory")
 }
@@ -63,11 +62,12 @@ model ParkingLot {
 model Booking {
   bookId       String      @id @default(uuid()) @map("book_id") @db.Char(36)
   userId       String      @map("user_id") @db.Char(36)
-  parkingId    String      @map("parking_id") @db.VarChar(250)
   parkingLotId String      @map("parkinglot_id") @db.Char(36)
-  paymentId    String      @map("payment_id") @db.VarChar(250)
+  paymentId    String?     @map("payment_id") @db.VarChar(250)
   user         User        @relation(fields: [userId], references: [id])
   parkingLot   ParkingLot  @relation(fields: [parkingLotId], references: [id])
+
+  vehicle      Vehicle?    @relation("BookingVehicle")
 
   @@map("booking")
 }
@@ -75,18 +75,15 @@ model Booking {
 // Vehicle Model
 model Vehicle {
   id                  String     @id @default(uuid()) @db.Char(36)
-  parkingNumber       String?    @map("ParkingNumber") @db.VarChar(120)
+  bookId              String?    @unique @map("BookId") @db.VarChar(36)
   vehicleCategory     String     @map("VehicleCategory") @db.VarChar(120)
   vehicleCompanyName  String?    @map("VehicleCompanyname") @db.VarChar(120)
   registrationNumber  String?    @map("RegistrationNumber") @db.VarChar(120)
-  ownerName           String?    @map("OwnerName") @db.VarChar(120)
-  ownerContactNumber  String?    @map("OwnerContactNumber") @db.VarChar(20)
   inTime              DateTime?  @default(now()) @map("InTime") @db.Timestamp(0)
   outTime             DateTime?  @map("OutTime") @db.Timestamp(0)
-  parkingCharge       String     @map("ParkingCharge") @db.VarChar(120)
-  remark              String     @map("Remark") @db.MediumText
-  status              String     @db.VarChar(5)
-  category            Category?  @relation(fields: [vehicleCategory], references: [vehicleCat])
+  remark              String?     @map("Remark") @db.MediumText
+  status              String?     @db.VarChar(5)
+  booking             Booking?   @relation("BookingVehicle", fields: [bookId], references: [bookId])
 
   @@map("tblvehicle")
 }

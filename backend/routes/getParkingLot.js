@@ -1,9 +1,8 @@
 import express from 'express';
-import { PrismaClient } from '@prisma/client';
+import prisma from '../prisma/client.js';
 import dotenv from 'dotenv';
 
 const router = express.Router();
-const prisma = new PrismaClient();
 dotenv.config();
 
 // Get Locations Route
