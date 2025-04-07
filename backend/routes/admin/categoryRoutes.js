@@ -1,15 +1,6 @@
-// Category Model
-// model Category {
-//     id           String     @id @default(uuid()) @db.Char(36)
-//     vehicleCat   String     @map("VehicleCat") @db.VarChar(120)
-//     creationDate DateTime?  @default(now()) @map("CreationDate") @db.Timestamp(0)
-  
-//     @@map("tblcategory")
-//   }
-
 import express from "express";
-import primsa from "../../prisma/prismaClient.js";
-import auth from "../../middleware/auth.js";
+import primsa from "../../prisma/client.js";
+import auth from "../../middlewares/auth.js";
 
 const router = express.Router();
 

@@ -1,7 +1,7 @@
 // generate report between two dates
 import express from 'express';
-import prisma from '../../prisma/prismaClient.js';
-import auth from '../../middleware/auth.js';
+import prisma from '../../prisma/client.js';
+import auth from '../../middlewares/auth.js';
 
 const router = express.Router();
 
