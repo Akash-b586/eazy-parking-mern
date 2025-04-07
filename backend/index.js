@@ -6,6 +6,9 @@ import getLocationsRoute from './routes/getParkingLot.js'
 import adminAuthRoute from './routes/admin/authRoute.js'
 import addParkingLotRoute from './routes/admin/addParkingLot.js'
 import getPastBookingsRoute from './routes/user/getPastBookings.js'
+import categoryRoutes from './routes/admin/categoryRoutes.js'
+import showRegisteredUsersRoute from './routes/admin/showRegisteredUsers.js'
+import generateReportRoute from './routes/admin/generateReport.js'
 
 const app = express();
 
@@ -24,6 +27,9 @@ app.use('/api/locations', getLocationsRoute);
 app.use('/api/admin/addParkingLot', addParkingLotRoute);
 app.use('/api/admin/auth', adminAuthRoute);
 app.use('/api/user/getPastBookings', getPastBookingsRoute);
+app.use('/api/admin/category', categoryRoutes);
+app.use('/api/admin/showRegisteredUsers', showRegisteredUsersRoute);
+app.use('/api/admin/generateReport', generateReportRoute);
 
 app.get('/', (req, res) => {
     res.send('Hello, World! pyaaare kushagra');
