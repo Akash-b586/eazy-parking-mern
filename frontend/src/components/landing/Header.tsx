@@ -36,8 +36,8 @@ export default function Header({ isMobile }: HeaderProps) {
             <Link smooth to="#locations" className={`text-sm font-medium hover:text-gray-600 ${isActive("#locations") ? "text-blue-600" : "text-black dark:text-white"}`}>Locations</Link>
             <Link smooth to="#testimonials" className={`text-sm font-medium hover:text-gray-600 ${isActive("#testimonials") ? "text-blue-600" : "text-black dark:text-white"}`}>Testimonials</Link>
             <Link smooth to="#contact" className={`text-sm font-medium hover:text-gray-600 ${isActive("#contact") ? "text-blue-600" : "text-black dark:text-white"}`}>Contact</Link>
-            <Button variant="outlined" className="ml-4">Login</Button>
-            <Button className="bg-black text-white hover:bg-gray-800">Create Account</Button>
+            <Button href="/login" variant="outlined" className="ml-4">Login</Button>
+            <Button href="/register" className="bg-black text-white hover:bg-gray-800">Create Account</Button>
           </nav>
         )}
       </div>
@@ -55,7 +55,7 @@ export default function Header({ isMobile }: HeaderProps) {
             <Link to="#testimonials" className="py-3 text-sm font-medium hover:text-gray-600 transition-colors">Testimonials</Link>
             <Link to="#contact" className="py-3 text-sm font-medium hover:text-gray-600 transition-colors">Contact</Link>
             <div className="flex flex-col space-y-2 mt-4">
-              <Button variant="outlined" className="w-full">Login</Button>
+              <Button href="/login" variant="outlined" className="w-full">Login</Button>
               <button className="w-full dark:bg-white bg-black text-white dark:text-black hover:bg-gray-800">Create Account</button>
             </div>
           </nav>
