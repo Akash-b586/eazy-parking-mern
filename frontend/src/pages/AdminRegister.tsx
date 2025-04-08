@@ -1,120 +1,4 @@
-// import React, { useState, ChangeEvent, FormEvent } from 'react';
 
-// import { BACKEND_URL } from '../utils/backend';
-// import Cookies from 'js-cookie';
-// import { useNavigate } from 'react-router-dom';
-
-// interface RegisterFormData {
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   password: string;
-//   mobileNumber: string;
-// }
-
-// const Register: React.FC = () => {
-//   const [formData, setFormData] = useState<RegisterFormData>({
-//     firstName: '',
-//     lastName: '',
-//     email: '',
-//     password: '',
-//     mobileNumber: ''
-//   });
-
-//   const [error, setError] = useState<string>('');
-//   const [success, setSuccess] = useState<string>('');
-//   const navigate = useNavigate();
-
-//   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({
-//       ...prev,
-//       [name]: value
-//     }));
-//   };
-
-//   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-//     setError('');
-//     setSuccess('');
-
-//     try {
-//       const res = await axios.post(`${BACKEND_URL}/api/auth/register`, formData);
-//       setSuccess('Registration successful!');
-//       Cookies.set('token', res.data.token, { expires: 7 });
-//       navigate('/dashboard');
-      
-//     } catch (err: any) {
-//       setError(err || 'Registration failed');
-//     }
-//   };
-
-//   return (
-//     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-//       <div className="bg-white shadow-md rounded px-8 py-6 w-full max-w-md">
-//         <h2 className="text-2xl font-bold mb-6 text-center">Register</h2>
-//         <form onSubmit={handleSubmit} className="space-y-4">
-//           <input
-//             type="text"
-//             name="firstName"
-//             placeholder="First Name"
-//             value={formData.firstName}
-//             onChange={handleChange}
-//             required
-//             className="w-full px-4 py-2 border rounded"
-//           />
-//           <input
-//             type="text"
-//             name="lastName"
-//             placeholder="Last Name"
-//             value={formData.lastName}
-//             onChange={handleChange}
-//             required
-//             className="w-full px-4 py-2 border rounded"
-//           />
-//           <input
-//             type="text"
-//             name="mobileNumber"
-//             placeholder="Mobile Number"
-//             value={formData.mobileNumber}
-//             onChange={handleChange}
-//             required
-//             className="w-full px-4 py-2 border rounded"
-//           />
-//           <input
-//             type="email"
-//             name="email"
-//             placeholder="Email"
-//             value={formData.email}
-//             onChange={handleChange}
-//             required
-//             className="w-full px-4 py-2 border rounded"
-//           />
-//           <input
-//             type="password"
-//             name="password"
-//             placeholder="Password"
-//             value={formData.password}
-//             onChange={handleChange}
-//             required
-//             className="w-full px-4 py-2 border rounded"
-//           />
-//           <button
-//             type="submit"
-//             className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-//           >
-//             Register
-//           </button>
-//         </form>
-
-//         {error && <p className="mt-4 text-red-500 text-sm">{error}</p>}
-//         {success && <p className="mt-4 text-green-500 text-sm">{success}</p>}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Register;
 
 import * as React from 'react';
 import axios from 'axios';
@@ -187,23 +71,21 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 }));
 
 export default function SignUp(props: { disableCustomTheme?: boolean }) {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
-  const [nameError, setNameError] = React.useState(false);
-  const [nameErrorMessage, setNameErrorMessage] = React.useState('');
+  const [adminNameError, setAdminNameError] = React.useState(false);
+  const [adminNameErrorMessage, setAdminNameErrorMessage] = React.useState('');
   const [mobileError, setMobileError] = React.useState(false);
- const [mobileErrorMessage, setMobileErrorMessage] = React.useState('');
-
+  const [mobileErrorMessage, setMobileErrorMessage] = React.useState('');
 
   const validateInputs = () => {
     const email = document.getElementById('email') as HTMLInputElement;
     const password = document.getElementById('password') as HTMLInputElement;
-    const firstName = document.getElementById('firstName') as HTMLInputElement;
-    const lastName = document.getElementById('lastName') as HTMLInputElement;
+    const adminName = document.getElementById('adminName') as HTMLInputElement;
     const mobile = document.getElementById('mobileNumber') as HTMLInputElement;
 
     let isValid = true;
@@ -226,17 +108,13 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       setPasswordErrorMessage('');
     }
 
-    if (!firstName || firstName.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage('First name is required.');
-      isValid = false;
-    } else if (!lastName || lastName.value.length < 1) {
-      setNameError(true);
-      setNameErrorMessage('Last name is required.');
+    if (!adminName || adminName.value.length < 1) {
+      setAdminNameError(true);
+      setAdminNameErrorMessage('Admin name is required.');
       isValid = false;
     } else {
-      setNameError(false);
-      setNameErrorMessage('');
+      setAdminNameError(false);
+      setAdminNameErrorMessage('');
     }
 
     if (!mobile.value || !/^[6-9]\d{9}$/.test(mobile.value)) {
@@ -253,35 +131,31 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-  
+
     if (!validateInputs()) return;
-  
+
     const data = new FormData(event.currentTarget);
-  
+
     const userData = {
-      firstName: data.get('firstName'),
-      lastName: data.get('lastName'),
+      adminName: data.get('adminName'),
       email: data.get('email'),
       password: data.get('password'),
-      mobile: data.get('mobileNumber'),
+      mobileNumber: data.get('mobileNumber'),
     };
-  
-    try {
-      const response = await axios.post(`${BACKEND_URL}/api/auth/register`, userData); // replace URL
-      console.log('Signup successful:', response.data);
-        
-       Cookies.set('token', response.data.token, { expires: 7 });
-      
-      //navigate to login or show success
-      navigate('/dashboard');
 
+    try {
+      const response = await axios.post(`${BACKEND_URL}/api/admin/auth/register`, userData);
+      console.log('Signup successful:', response.data);
+
+      Cookies.set('token', response.data.token, { expires: 7 });
+
+      navigate('//admin/dashboard');
       alert('Account created successfully!');
     } catch (error: any) {
       console.error('Signup error:', error.response?.data || error.message);
       alert('Signup failed: ' + (error.response?.data?.message || 'Something went wrong.'));
     }
   };
-  
 
   return (
     <AppTheme {...props}>
@@ -289,7 +163,6 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
-         
           <Typography
             component="h1"
             variant="h4"
@@ -297,38 +170,24 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
           >
             Sign up
           </Typography>
+
           <Box
             component="form"
             onSubmit={handleSubmit}
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           >
             <FormControl>
-              <FormLabel htmlFor="firstName">First name</FormLabel>
+              <FormLabel htmlFor="adminName">Name</FormLabel>
               <TextField
-                autoComplete="given-name"
-                name="firstName"
+                autoComplete="name"
+                name="adminName"
                 required
                 fullWidth
-                id="firstName"
-                placeholder="Jon"
-                error={nameError}
-                helperText={nameErrorMessage}
-                color={nameError ? 'error' : 'primary'}
-              />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel htmlFor="lastName">Last name</FormLabel>
-              <TextField
-                autoComplete="family-name"
-                name="lastName"
-                required
-                fullWidth
-                id="lastName"
-                placeholder="Snow"
-                error={nameError}
-                helperText={nameErrorMessage}
-                color={nameError ? 'error' : 'primary'}
+                id="adminName"
+                placeholder="John Doe"
+                error={adminNameError}
+                helperText={adminNameErrorMessage}
+                color={adminNameError ? 'error' : 'primary'}
               />
             </FormControl>
 
@@ -344,9 +203,10 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
                 variant="outlined"
                 error={emailError}
                 helperText={emailErrorMessage}
-                color={passwordError ? 'error' : 'primary'}
+                color={emailError ? 'error' : 'primary'}
               />
             </FormControl>
+
             <FormControl>
               <FormLabel htmlFor="password">Password</FormLabel>
               <TextField
@@ -363,26 +223,28 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
                 color={passwordError ? 'error' : 'primary'}
               />
             </FormControl>
+
             <FormControl>
-            <FormLabel htmlFor="mobileNumber">Mobile Number</FormLabel>
-            <TextField
-              required
-              fullWidth
-              id="mobileNumber"
-              placeholder="9999999999"
-              name="mobileNumber"
-              autoComplete="tel"
-              variant="outlined"
-              error={mobileError}
-              helperText={mobileErrorMessage}
-              color={mobileError ? 'error' : 'primary'}
-            />
-          </FormControl>
+              <FormLabel htmlFor="mobileNumber">Mobile Number</FormLabel>
+              <TextField
+                required
+                fullWidth
+                id="mobileNumber"
+                placeholder="9999999999"
+                name="mobileNumber"
+                autoComplete="tel"
+                variant="outlined"
+                error={mobileError}
+                helperText={mobileErrorMessage}
+                color={mobileError ? 'error' : 'primary'}
+              />
+            </FormControl>
 
             <FormControlLabel
               control={<Checkbox value="allowExtraEmails" color="primary" />}
               label="I want to receive updates via email."
             />
+
             <Button
               type="submit"
               fullWidth
@@ -392,9 +254,11 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
               Sign up
             </Button>
           </Box>
+
           <Divider>
             <Typography sx={{ color: 'text.secondary' }}>or</Typography>
           </Divider>
+
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Button
               fullWidth
@@ -415,17 +279,15 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
             <Typography sx={{ textAlign: 'center' }}>
               Already have an account?{' '}
               <Link
-                href="/material-ui/getting-started/templates/sign-in/"
+                href="/admin/login"
                 variant="body2"
                 sx={{ alignSelf: 'center' }}
               >
-               
-                <a    href="/login" 
-                   className="no-underline hover:underline hover:text-blue-600 transition duration-200"    >
+                <a
+                  className="no-underline hover:underline hover:text-blue-600 transition duration-200"
+                >
                   Sign in
-                  </a>
-
-                
+                </a>
               </Link>
             </Typography>
           </Box>
@@ -434,5 +296,6 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
     </AppTheme>
   );
 }
+
 
 

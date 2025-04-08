@@ -15,8 +15,8 @@ export default function Hero() {
               The smart way to find and book parking spaces in your city. No more circling blocks or stressing over spots.
             </p>
             <div className="flex flex-wrap gap-4 pt-4">
-              <Button className="bg-black text-white hover:bg-gray-800 px-8 py-6 text-lg">Create Account</Button>
-              <Button variant="outlined" className="px-8 py-6 text-lg">Login</Button>
+              <Button href="/register" className="bg-black text-white hover:bg-gray-800 px-8 py-6 text-lg">Create Account</Button>
+              <Button href="/login" variant="outlined" className="px-8 py-6 text-lg">Login</Button>
             </div>
           </motion.div>
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5, delay: 0.2 }} className="relative">

@@ -35,7 +35,7 @@ export default function Home() {
       <Locations currentCityIndex={currentCityIndex} setCurrentCityIndex={setCurrentCityIndex} />
       <Testimonials />
       <CTA />
-      <WorldMap dots={dots} />
+      {/* <WorldMap dots={dots} /> */}
       <Footer />
       </div>
     </div>
