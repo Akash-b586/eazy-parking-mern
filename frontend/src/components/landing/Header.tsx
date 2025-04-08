@@ -2,7 +2,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { NavHashLink as Link } from 'react-router-hash-link';
+import { useLocation } from "react-router-dom";
 
 interface HeaderProps {
   isMobile: boolean;
@@ -10,7 +11,10 @@ interface HeaderProps {
 
 export default function Header({ isMobile }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-
+  const location = useLocation();
+  const isActive = (targetPath: string) => {
+    return location.hash === targetPath;
+  };
   const toggleMenu = (): void => setIsMenuOpen(!isMenuOpen);
 
   return (
@@ -26,10 +30,12 @@ export default function Header({ isMobile }: HeaderProps) {
           </button>
         ) : (
           <nav className="flex items-center space-x-8">
-            <Link to="#features" className="text-sm font-medium hover:text-gray-600 transition-colors">Features</Link>
-            <Link to="#locations" className="text-sm font-medium hover:text-gray-600 transition-colors">Locations</Link>
-            <Link to="#testimonials" className="text-sm font-medium hover:text-gray-600 transition-colors">Testimonials</Link>
-            <Link to="#contact" className="text-sm font-medium hover:text-gray-600 transition-colors">Contact</Link>
+            <Link smooth to="#features"
+            className={`text-sm font-medium hover:text-gray-600 ${isActive("#features") ? "text-blue-600" : "text-black dark:text-white"}`}
+             >Features</Link>
+            <Link smooth to="#locations" className={`text-sm font-medium hover:text-gray-600 ${isActive("#locations") ? "text-blue-600" : "text-black dark:text-white"}`}>Locations</Link>
+            <Link smooth to="#testimonials" className={`text-sm font-medium hover:text-gray-600 ${isActive("#testimonials") ? "text-blue-600" : "text-black dark:text-white"}`}>Testimonials</Link>
+            <Link smooth to="#contact" className={`text-sm font-medium hover:text-gray-600 ${isActive("#contact") ? "text-blue-600" : "text-black dark:text-white"}`}>Contact</Link>
             <Button variant="outlined" className="ml-4">Login</Button>
             <Button className="bg-black text-white hover:bg-gray-800">Create Account</Button>
           </nav>

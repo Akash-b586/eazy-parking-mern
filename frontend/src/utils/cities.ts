@@ -11,7 +11,7 @@ export const cities : City[] = [
     {
       id: 1,
       name: "New York",
-      image: "https://img.freepik.com/premium-photo/downtown-sydney-skyline-australia-from-top-view-twilight_255553-208.jpg?w=2000",
+      image: "https://images.pexels.com/photos/2833714/pexels-photo-2833714.jpeg?auto=compress&cs=tinysrgb&w=1200",
       parkingLots: ["Central Park Garage", "Times Square Parking"],
       rating: 4.8,
       address: "Manhattan, NY",
@@ -19,7 +19,7 @@ export const cities : City[] = [
     {
       id: 2,
       name: "Los Angeles",
-      image: "/placeholder.svg?height=400&width=600",
+      image: "https://images.pexels.com/photos/753876/pexels-photo-753876.jpeg?auto=compress&cs=tinysrgb&w=1200",
       parkingLots: ["Hollywood Parking", "Downtown LA Garage"],
       rating: 4.5,
       address: "Los Angeles, CA",
@@ -27,7 +27,7 @@ export const cities : City[] = [
     {
       id: 3,
       name: "Chicago",
-      image: "/placeholder.svg?height=400&width=600",
+      image: "https://images.pexels.com/photos/1004409/pexels-photo-1004409.jpeg?auto=compress&cs=tinysrgb&w=1200",
       parkingLots: ["Millennium Park Garage", "Navy Pier Parking"],
       rating: 4.7,
       address: "Chicago, IL",
@@ -35,7 +35,7 @@ export const cities : City[] = [
     {
       id: 4,
       name: "Miami",
-      image: "/placeholder.svg?height=400&width=600",
+      image: "https://images.pexels.com/photos/831475/pexels-photo-831475.jpeg?auto=compress&cs=tinysrgb&w=1200",
       parkingLots: ["South Beach Parking", "Downtown Miami Garage"],
       rating: 4.6,
       address: "Miami, FL",

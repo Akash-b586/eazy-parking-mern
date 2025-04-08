@@ -70,7 +70,7 @@ export default function Locations({ currentCityIndex, setCurrentCityIndex }: Loc
               <button
                 key={index}
                 onClick={() => setCurrentCityIndex(index)}
-                className={`w-3 h-3 rounded-full ${index === currentCityIndex ? "bg-black" : "bg-gray-300"}`}
+                className={`w-3 h-3 rounded-full ${index === currentCityIndex ? "bg-black dark:bg-white" : "bg-gray-300 dark:bg-gray-500"}`}
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
