@@ -68,7 +68,13 @@ const SignInContainer = styled(Stack)(({ theme }) => ({
 export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const navigate = useNavigate();
 
-  
+  React.useEffect(() => {
+    const token = Cookies.get('token');
+    if (token) {
+      navigate('/dashboard');
+    }
+  }
+  , []);
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 

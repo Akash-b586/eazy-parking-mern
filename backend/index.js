@@ -9,6 +9,7 @@ import getPastBookingsRoute from './routes/user/getPastBookings.js'
 import categoryRoutes from './routes/admin/categoryRoutes.js'
 import showRegisteredUsersRoute from './routes/admin/showRegisteredUsers.js'
 import generateReportRoute from './routes/admin/generateReport.js'
+import getparkingsRoute from './routes/user/getParkings.js'
 
 const app = express();
 
@@ -30,6 +31,7 @@ app.use('/api/user/getPastBookings', getPastBookingsRoute);
 app.use('/api/admin/category', categoryRoutes);
 app.use('/api/admin/showRegisteredUsers', showRegisteredUsersRoute);
 app.use('/api/admin/generateReport', generateReportRoute);
+app.use('/api/user/getParkings', getparkingsRoute);
 
 app.get('/', (req, res) => {
     res.send('Hello, World! pyaaare kushagra');

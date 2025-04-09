@@ -188,6 +188,13 @@ const SignUpContainer = styled(Stack)(({ theme }) => ({
 
 export default function SignUp(props: { disableCustomTheme?: boolean }) {
    const navigate = useNavigate();
+   React.useEffect(()=>{
+    const token = Cookies.get("token")
+    if(token){
+      navigate("/dashboard")
+    }
+
+   },[])
 
   const [emailError, setEmailError] = React.useState(false);
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');

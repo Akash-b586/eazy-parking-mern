@@ -123,7 +123,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       });
 
       setSuccess('Login successful!');
-      Cookies.set('token', res.data.token, { expires: 7 });
+      Cookies.set('adminToken', res.data.token, { expires: 7 });
       navigate('/admin/dashboard');
     } catch (err: any) {
       setError(err?.response?.data?.message || 'Login failed');

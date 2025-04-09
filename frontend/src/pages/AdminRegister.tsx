@@ -147,7 +147,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
       const response = await axios.post(`${BACKEND_URL}/api/admin/auth/register`, userData);
       console.log('Signup successful:', response.data);
 
-      Cookies.set('token', response.data.token, { expires: 7 });
+      Cookies.set('adminToken', response.data.token, { expires: 7 });
 
       navigate('//admin/dashboard');
       alert('Account created successfully!');
