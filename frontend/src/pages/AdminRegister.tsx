@@ -168,7 +168,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
             variant="h4"
             sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}
           >
-            Sign up
+            Admin Register
           </Typography>
 
           <Box
@@ -268,14 +268,6 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
             >
               Sign up with Google
             </Button>
-            <Button
-              fullWidth
-              variant="outlined"
-              onClick={() => alert('Sign up with Facebook')}
-              startIcon={<FacebookIcon />}
-            >
-              Sign up with Facebook
-            </Button>
             <Typography sx={{ textAlign: 'center' }}>
               Already have an account?{' '}
               <Link
@@ -288,6 +280,12 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
                 >
                   Sign in
                 </a>
+              </Link>
+            </Typography>
+            <Typography sx={{ textAlign: 'center' }}>
+              Back to{' '}
+              <Link href="/" variant="body2" sx={{ alignSelf: 'center' }}>
+                Home
               </Link>
             </Typography>
           </Box>

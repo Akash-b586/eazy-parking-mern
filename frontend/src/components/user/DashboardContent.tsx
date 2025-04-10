@@ -3,10 +3,9 @@ import {
     PieChart,
     LineChart,
     barElementClasses,
-    pieArcLabelClasses,
   } from '@mui/x-charts'
   import { Card, CardContent, Typography, useTheme } from '@mui/material'
-  import React, { useContext } from 'react'
+  import { useContext } from 'react'
   import { ThemeContext } from '@/context/ThemeContext'
   
   const UserDashboard = () => {

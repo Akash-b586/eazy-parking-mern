@@ -21,7 +21,7 @@ import { styled } from '@mui/material/styles';
 import ForgotPassword from '../components/auth/ForgotPassword';
 import AppTheme from '../shared-theme/AppTheme';
 import ColorModeSelect from '../shared-theme/ColorModeSelect';
-import { GoogleIcon, FacebookIcon } from '../components/auth/CustomIcons';
+import { GoogleIcon } from '../components/auth/CustomIcons';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -142,7 +142,6 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       <SignInContainer direction="column" justifyContent="space-between">
         <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
         <Card variant="outlined">
-          
           <Typography component="h1" variant="h4" sx={{ width: '100%', fontSize: 'clamp(2rem, 10vw, 2.15rem)' }}>
             Sign in
           </Typography>
@@ -208,13 +207,16 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
             <Button fullWidth variant="outlined" onClick={() => alert('Sign in with Google')} startIcon={<GoogleIcon />}>
               Sign in with Google
             </Button>
-            <Button fullWidth variant="outlined" onClick={() => alert('Sign in with Facebook')} startIcon={<FacebookIcon />}>
-              Sign in with Facebook
-            </Button>
             <Typography sx={{ textAlign: 'center' }}>
               Don&apos;t have an account?{' '}
               <Link href="/register" variant="body2" sx={{ alignSelf: 'center' }}>
                 Sign up
+              </Link>
+            </Typography>
+            <Typography sx={{ textAlign: 'center' }}>
+              Back to{' '}
+              <Link href="/" variant="body2" sx={{ alignSelf: 'center' }}>
+                Home
               </Link>
             </Typography>
           </Box>

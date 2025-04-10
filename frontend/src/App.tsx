@@ -10,7 +10,7 @@ import Login from './pages/Login'
 import Home from './pages/Home'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
-import Admin from './pages/Admin'
+// import Admin from './pages/Admin'
 import AdminLogin from './pages/adminlogin'
 import AdminRegister from './pages/AdminRegister'
 import AdminDashboard from './pages/AdminDashboard'
@@ -18,6 +18,7 @@ import Logout from './pages/Logout'
 import Bookings from './pages/Bookings'
 import ProtectedRoute from './components/ProtectedRoute'
 import Cookies from 'js-cookie'
+import Reports from './pages/Reports'
 
 
 const ThemeSwitcher = () => {
@@ -95,6 +96,12 @@ const AppContent = () => {
             <Bookings />
             </ProtectedRoute>
             } />
+            <Route path ="/reports" element={
+            <ProtectedRoute isAuthenticated={isUserAuthenticated}
+            redirectPath='/login'
+            >
+            <Reports />
+            </ProtectedRoute>} />
         </Routes>
       </Router>
     </MuiThemeProvider>

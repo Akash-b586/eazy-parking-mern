@@ -22,10 +22,10 @@ const menuItems = [
 const Sidebar = ({ isOpen, toggleSidebar }: any) => {
   return (
     <motion.aside
-      initial={{ x: -150 }}
-      animate={{ x: isOpen ? 0 : -150 }}
-      transition={{ type: 'spring', stiffness: 100 }}
-      className="bg-white dark:bg-gray-900 text-gray-800 dark:text-white w-64 h-full fixed top-0 left-0 z-50 p-6 shadow-xl rounded-r-2xl"
+      // initial={{ x: -150 }}
+      // animate={{ x: isOpen ? 0 : -150 }}
+      // transition={{ type: 'spring', stiffness: 100 }}
+      className="bg-white dark:bg-zinc-900 text-gray-800 dark:text-white w-64 h-full fixed top-0 left-0 z-50 p-6 shadow-xl rounded-r-2xl"
     >
       <div className="flex justify-between items-center mb-8">
         <h2 className="text-2xl font-semibold tracking-tighter"> 
