@@ -11,12 +11,6 @@ const Dashboard = () => {
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
-  useEffect(() => {
-    const token = Cookies.get("token")
-    if (!token) {
-      navigate('/login')
-    }
-  }, [])
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 

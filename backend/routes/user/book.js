@@ -17,12 +17,14 @@ router.post('/', auth, async (req, res) => {
             inTime
         } = req.body;
         const userId = req.userId;
-
+        const intime = new Date(inTime);
         const result = await prisma.$transaction(async (tx) => {
             // Get the parking lot
             const parkingLot = await tx.parkingLot.findUnique({
-                where: { id: parkingLotId },
-            });
+                where: {
+                  id: parkingLotId,
+                },
+              })
 
             if (!parkingLot) {
                 throw new Error('Parking lot not found');
@@ -36,7 +38,7 @@ router.post('/', auth, async (req, res) => {
             // Update slot count
             await tx.parkingLot.update({
                 where: { id: parkingLotId },
-                data: { bookedSlots: { increment: 1 } },
+                data: { bookedSlot: { increment: 1 } },
             });
 
             // Create booking
@@ -49,13 +51,14 @@ router.post('/', auth, async (req, res) => {
             });
 
             // Create vehicle
+            
             const vehicle = await tx.vehicle.create({
                 data: {
-                    bookingId: booking.bookId,
+                    bookId: booking.bookId,
                     vehicleCategory,
                     vehicleCompanyName,
                     registrationNumber,
-                    inTime,
+                    inTime: intime,
                 },
             });
 

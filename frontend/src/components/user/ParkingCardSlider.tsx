@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, PanInfo } from "framer-motion";
 import { ChevronLeft, ChevronRight, Search } from "./Icons"; // Make sure path is correct
 import { Skeleton } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 interface ParkingSpot {
   id: number;
@@ -183,7 +184,7 @@ interface ParkingCardProps {
 
 const ParkingCard: React.FC<ParkingCardProps> = ({ spot }) => {
   const availabilityPercentage = (spot.availableSlots / spot.totalSlots) * 100;
-
+  const navigate = useNavigate();
   return (
     <motion.div
       whileHover={{ y: -5 }}
@@ -224,7 +225,11 @@ const ParkingCard: React.FC<ParkingCardProps> = ({ spot }) => {
           </div>
         </div>
 
-        <button className="w-full bg-teal-500 hover:bg-teal-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50">
+        <button className="w-full bg-teal-500
+        hover:cursor-pointer
+        hover:bg-teal-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50"
+        onClick={()=>{navigate(`/bookings/${spot.id}`)}}
+        >
           Book Now
         </button>
       </div>

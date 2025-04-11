@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { SpeedDial, CssBaseline } from '@mui/material'
 import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles'
-import { Moon, Sun } from 'lucide-react'
+import { Moon, Settings, Sun } from 'lucide-react'
 import { useContext, useMemo } from 'react'
 
 import { ThemeContext, ThemeProvider } from './context/ThemeContext'
@@ -18,7 +18,9 @@ import Logout from './pages/Logout'
 import Bookings from './pages/Bookings'
 import ProtectedRoute from './components/ProtectedRoute'
 import Cookies from 'js-cookie'
+import Book from './pages/Book'
 import Reports from './pages/Reports'
+import Setting from './pages/Setting'
 
 
 const ThemeSwitcher = () => {
@@ -93,9 +95,15 @@ const AppContent = () => {
            <ProtectedRoute isAuthenticated={isUserAuthenticated}
            redirectPath='/login'
            >
-            <Bookings />
+            <Book />
             </ProtectedRoute>
             } />
+            <Route path ="/settings" element={
+            <ProtectedRoute isAuthenticated={isUserAuthenticated}
+            redirectPath='/login'
+            >
+            <Setting />
+            </ProtectedRoute>} />
             <Route path ="/reports" element={
             <ProtectedRoute isAuthenticated={isUserAuthenticated}
             redirectPath='/login'
