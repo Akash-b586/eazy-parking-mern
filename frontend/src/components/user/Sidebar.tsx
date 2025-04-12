@@ -3,7 +3,6 @@ import { NavLink } from 'react-router-dom'
 import {
   LayoutDashboard,
   CalendarCheck2,
-  ParkingSquare,
   BarChart2,
   Settings,
   X,
@@ -13,13 +12,13 @@ import {
 const menuItems = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { label: 'Bookings', path: '/bookings', icon: CalendarCheck2 },
-  { label: 'Slots', path: '/slots', icon: ParkingSquare },
+  // { label: 'Slots', path: '/slots', icon: ParkingSquare },
   { label: 'Reports', path: '/reports', icon: BarChart2 },
   { label: 'Settings', path: '/settings', icon: Settings },
   { label: 'Logout', path:'/logout', icon :LogOut}
 ]
 
-const Sidebar = ({ isOpen, toggleSidebar }: any) => {
+const Sidebar = ({ toggleSidebar }: any) => {
   return (
     <motion.aside
       // initial={{ x: -150 }}

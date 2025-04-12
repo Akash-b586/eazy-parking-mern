@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { BACKEND_URL } from "../../utils/backend";
 import axios from "axios";
 import Cookies from "js-cookie";

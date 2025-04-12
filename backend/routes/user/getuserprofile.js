@@ -6,7 +6,7 @@ const router = express.Router();
 const prisma = new PrismaClient();
 
 // GET /api/user/profile
-router.get('/', auth, async (req, res) => {
+router.get('/getuserprofile', auth, async (req, res) => {
   try {
     const userId = req.userId;
 
@@ -41,6 +41,48 @@ router.get('/', auth, async (req, res) => {
     res.json(userWithImage);
   } catch (err) {
     console.error('Error fetching profile:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+router.patch('/setuserprofile', auth, async (req, res) => {
+  try {
+    const userId = req.userId;
+    const { firstName, lastName, email, mobileNumber } = req.body;
+
+    if (!userId) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const existingUser = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!existingUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        firstName,
+        lastName,
+        email,
+        mobileNumber,
+      },
+    });
+
+    res.status(200).json({
+      message: 'Profile updated successfully',
+      user: {
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        email: updatedUser.email,
+        mobileNumber: updatedUser.mobileNumber,
+      },
+    });
+  } catch (err) {
+    console.error('Error updating profile:', err);
     res.status(500).json({ message: 'Server error' });
   }
 });

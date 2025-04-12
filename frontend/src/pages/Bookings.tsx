@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
@@ -6,7 +6,6 @@ import Sidebar from "@/components/user/Sidebar";
 import { ParkingCardSlider } from "../components/user/ParkingCardSlider";
 import axios from "axios";
 import { BACKEND_URL } from "@/utils/backend";
-import { Skeleton } from "@mui/material";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -35,7 +34,7 @@ const Dashboard = () => {
         });
 
         // Transform data for ParkingCardSlider
-        const transformed = res.data.map((lot) => ({
+        const transformed = res.data.map((lot: any) => ({
           id: lot.id,
           image: lot.imgUrl,
           location: lot.location,
@@ -79,7 +78,7 @@ const Dashboard = () => {
 
       {/* Main Content */}
 
-      <ParkingCardSlider parkingSpots={parkingSpots} loading={loading}/>
+      <ParkingCardSlider parkingSpots={parkingSpots} loading={loading} />
     </div>
   );
 };

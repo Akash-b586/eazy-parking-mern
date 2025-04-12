@@ -1,37 +1,44 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { CameraIcon, PencilIcon, SaveIcon } from 'lucide-react';
-import Cookies from 'js-cookie';
-import { BACKEND_URL } from '@/utils/backend';
-import toast from 'react-hot-toast';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { CameraIcon, PencilIcon, SaveIcon } from "lucide-react";
+import Cookies from "js-cookie";
+import { BACKEND_URL } from "@/utils/backend";
+import toast from "react-hot-toast";
 
 export default function Profile() {
   const [user, setUser] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    mobileNumber: '',
-    profileImage: '',
-    memberSince: '',
-    status: 'Active',
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobileNumber: "",
+    profileImage: "",
+    memberSince: "",
+    status: "Active",
   });
 
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState({ ...user });
 
-  const token = Cookies.get('token');
+  const token = Cookies.get("token");
 
   useEffect(() => {
     if (!token) return;
     axios
-      .get(`${BACKEND_URL}/api/user/profile`, {
+      .get(`${BACKEND_URL}/api/user/profile/getuserprofile`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
       .then((res) => {
         console.log(res.data);
-        const { firstName, lastName, email, mobileNumber, regDate, profileImage } = res.data;
+        const {
+          firstName,
+          lastName,
+          email,
+          mobileNumber,
+          regDate,
+          profileImage,
+        } = res.data;
         const updatedUser = {
           firstName,
           lastName,
@@ -39,7 +46,7 @@ export default function Profile() {
           mobileNumber,
           profileImage,
           memberSince: new Date(regDate).toLocaleDateString(),
-          status: 'Active',
+          status: "Active",
         };
         setUser(updatedUser);
         setFormData(updatedUser);
@@ -47,7 +54,7 @@ export default function Profile() {
       .catch((err) => console.error(err));
   }, [token]);
 
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: any) => {
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
@@ -57,7 +64,7 @@ export default function Profile() {
   const handleSaveChanges = () => {
     axios
       .patch(
-        `${BACKEND_URL}/api/user/setuserprofile`,
+        `${BACKEND_URL}/api/user/profile/setuserprofile`,
         {
           firstName: formData.firstName,
           lastName: formData.lastName,
@@ -70,25 +77,25 @@ export default function Profile() {
           },
         }
       )
-      .then((res) => {
+      .then((_res: any) => {
         setUser((prev) => ({
           ...prev,
           ...formData,
         }));
         setEditMode(false);
-        toast.success('Profile updated successfully!');
+        toast.success("Profile updated successfully!");
       })
       .catch((err) => console.error(err));
   };
 
-  const handleImageChange = (e) => {
+  const handleImageChange = (e: any) => {
     const selectedFile = e.target.files[0];
     if (selectedFile) {
       const imageData = new FormData();
-      imageData.append('profileImage', selectedFile);
+      imageData.append("profileImage", selectedFile);
 
       axios
-        .post('/api/user/upload-profile', imageData, {
+        .post("/api/user/upload-profile", imageData, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -105,12 +112,14 @@ export default function Profile() {
       <div className="w-full max-w-md bg-white dark:bg-zinc-900 rounded-2xl shadow-xl p-6 space-y-6">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Profile</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Your profile information</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Your profile information
+          </p>
         </div>
 
         <div className="relative w-28 h-28 mx-auto">
           <img
-            src={user.profileImage || '/default-avatar.png'}
+            src={user.profileImage || "/default-avatar.png"}
             alt="Profile"
             className="rounded-full object-cover w-full h-full border-2 border-gray-300 dark:border-gray-600"
           />
@@ -139,7 +148,9 @@ export default function Profile() {
               onChange={handleInputChange}
               readOnly={!editMode}
               className={`w-full p-2 rounded-md ${
-                editMode ? 'bg-white dark:bg-gray-700' : 'bg-gray-100 dark:bg-gray-700'
+                editMode
+                  ? "bg-white dark:bg-gray-700"
+                  : "bg-gray-100 dark:bg-gray-700"
               } border border-gray-300 dark:border-gray-600`}
             />
           </div>
@@ -153,13 +164,17 @@ export default function Profile() {
               onChange={handleInputChange}
               readOnly={!editMode}
               className={`w-full p-2 rounded-md ${
-                editMode ? 'bg-white dark:bg-gray-700' : 'bg-gray-100 dark:bg-gray-700'
+                editMode
+                  ? "bg-white dark:bg-gray-700"
+                  : "bg-gray-100 dark:bg-gray-700"
               } border border-gray-300 dark:border-gray-600`}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Email Address</label>
+            <label className="block text-sm font-medium mb-1">
+              Email Address
+            </label>
             <input
               type="email"
               name="email"
@@ -167,13 +182,17 @@ export default function Profile() {
               onChange={handleInputChange}
               readOnly={!editMode}
               className={`w-full p-2 rounded-md ${
-                editMode ? 'bg-white dark:bg-gray-700' : 'bg-gray-100 dark:bg-gray-700'
+                editMode
+                  ? "bg-white dark:bg-gray-700"
+                  : "bg-gray-100 dark:bg-gray-700"
               } border border-gray-300 dark:border-gray-600`}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Mobile Number</label>
+            <label className="block text-sm font-medium mb-1">
+              Mobile Number
+            </label>
             <input
               type="text"
               name="mobileNumber"
@@ -181,7 +200,9 @@ export default function Profile() {
               onChange={handleInputChange}
               readOnly={!editMode}
               className={`w-full p-2 rounded-md ${
-                editMode ? 'bg-white dark:bg-gray-700' : 'bg-gray-100 dark:bg-gray-700'
+                editMode
+                  ? "bg-white dark:bg-gray-700"
+                  : "bg-gray-100 dark:bg-gray-700"
               } border border-gray-300 dark:border-gray-600`}
             />
           </div>
@@ -202,8 +223,12 @@ export default function Profile() {
           onClick={editMode ? handleSaveChanges : () => setEditMode(true)}
           className="w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-md mt-4"
         >
-          {editMode ? <SaveIcon className="w-4 h-4" /> : <PencilIcon className="w-4 h-4" />}
-          {editMode ? 'Save Changes' : 'Edit Profile'}
+          {editMode ? (
+            <SaveIcon className="w-4 h-4" />
+          ) : (
+            <PencilIcon className="w-4 h-4" />
+          )}
+          {editMode ? "Save Changes" : "Edit Profile"}
         </button>
       </div>
     </div>

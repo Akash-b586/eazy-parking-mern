@@ -2,7 +2,7 @@ import { BACKEND_URL } from '@/utils/backend';
 import { Button } from '@mui/material';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import { LoaderCircle, SaveIcon } from 'lucide-react';
+import { SaveIcon } from 'lucide-react';
 import { useState } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 

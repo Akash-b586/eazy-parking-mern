@@ -18,10 +18,15 @@ interface ParkingCardSliderProps {
   loading: boolean;
 }
 
-export const ParkingCardSlider: React.FC<ParkingCardSliderProps> = ({ parkingSpots,loading }) => {
+export const ParkingCardSlider: React.FC<ParkingCardSliderProps> = ({
+  parkingSpots,
+  loading,
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  console.log(loading);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredSpots, setFilteredSpots] = useState<ParkingSpot[]>(parkingSpots);
+  const [filteredSpots, setFilteredSpots] =
+    useState<ParkingSpot[]>(parkingSpots);
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -72,7 +77,7 @@ export const ParkingCardSlider: React.FC<ParkingCardSliderProps> = ({ parkingSpo
   };
 
   const handleDragEnd = (
-    event: MouseEvent | TouchEvent | PointerEvent,
+    _event: MouseEvent | TouchEvent | PointerEvent,
     info: PanInfo
   ) => {
     if (info.offset.x > 100) {
@@ -104,7 +109,6 @@ export const ParkingCardSlider: React.FC<ParkingCardSliderProps> = ({ parkingSpo
 
       {filteredSpots.length === 0 && (
         <div className="grid grid-cols-3 gap-4 text-center">
-          
           <Skeleton variant="rounded" width={330} height={290} />
           <Skeleton variant="rounded" width={330} height={290} />
           <Skeleton variant="rounded" width={330} height={290} />
@@ -113,30 +117,31 @@ export const ParkingCardSlider: React.FC<ParkingCardSliderProps> = ({ parkingSpo
 
       {filteredSpots.length > 0 && (
         <div className="relative">
-            <button
-              onClick={prevSlide}
-              disabled={currentIndex === 0}
-              className={`absolute left-[-60px] top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg text-gray-600 dark:text-gray-300 hover:text-teal-500 dark:hover:text-teal-400 transition-all ${
-                currentIndex === 0 ? "opacity-50 cursor-not-allowed" : "opacity-100 cursor-pointer"
-              }`}
-              aria-label="Previous slide"
-            >
-              <ChevronLeft />
-            </button>
+          <button
+            onClick={prevSlide}
+            disabled={currentIndex === 0}
+            className={`absolute left-[-60px] top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg text-gray-600 dark:text-gray-300 hover:text-teal-500 dark:hover:text-teal-400 transition-all ${
+              currentIndex === 0
+                ? "opacity-50 cursor-not-allowed"
+                : "opacity-100 cursor-pointer"
+            }`}
+            aria-label="Previous slide"
+          >
+            <ChevronLeft />
+          </button>
 
-            <button
-              onClick={nextSlide}
-              disabled={currentIndex >= filteredSpots.length - cardsToShow}
-              className={`absolute right-[-60px] top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg text-gray-600 dark:text-gray-300 hover:text-teal-500 dark:hover:text-teal-400 transition-all ${
-                currentIndex >= filteredSpots.length - cardsToShow
-                  ? "opacity-50 cursor-not-allowed"
-                  : "opacity-100 cursor-pointer"
-              }`}
-              aria-label="Next slide"
-            >
-              <ChevronRight />
-            </button>
-
+          <button
+            onClick={nextSlide}
+            disabled={currentIndex >= filteredSpots.length - cardsToShow}
+            className={`absolute right-[-60px] top-1/2 transform -translate-y-1/2 z-10 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg text-gray-600 dark:text-gray-300 hover:text-teal-500 dark:hover:text-teal-400 transition-all ${
+              currentIndex >= filteredSpots.length - cardsToShow
+                ? "opacity-50 cursor-not-allowed"
+                : "opacity-100 cursor-pointer"
+            }`}
+            aria-label="Next slide"
+          >
+            <ChevronRight />
+          </button>
 
           <div ref={sliderRef} className="overflow-hidden">
             <motion.div
@@ -146,12 +151,18 @@ export const ParkingCardSlider: React.FC<ParkingCardSliderProps> = ({ parkingSpo
               className="flex"
               style={{
                 width: `${(filteredSpots.length / cardsToShow) * 100}%`,
-                transform: `translateX(-${(currentIndex * 100) / filteredSpots.length}%)`,
+                transform: `translateX(-${
+                  (currentIndex * 100) / filteredSpots.length
+                }%)`,
                 transition: "transform 0.5s ease-in-out",
               }}
             >
               {filteredSpots.map((spot) => (
-                <div key={spot.id} className="px-2" style={{ width: `${100 / filteredSpots.length}%` }}>
+                <div
+                  key={spot.id}
+                  className="px-2"
+                  style={{ width: `${100 / filteredSpots.length}%` }}
+                >
                   <ParkingCard spot={spot} />
                 </div>
               ))}
@@ -189,7 +200,6 @@ const ParkingCard: React.FC<ParkingCardProps> = ({ spot }) => {
     <motion.div
       whileHover={{ y: -5 }}
       className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg h-full transition-all duration-300 border border-gray-100 dark:border-gray-700 "
-
     >
       <div className="relative h-48">
         <img
@@ -203,10 +213,14 @@ const ParkingCard: React.FC<ParkingCardProps> = ({ spot }) => {
       </div>
 
       <div className="p-5">
-        <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">{spot.location}</h3>
+        <h3 className="text-xl font-bold mb-2 text-gray-800 dark:text-white">
+          {spot.location}
+        </h3>
         <div className="mb-4">
           <div className="flex justify-between mb-1">
-            <span className="text-sm text-gray-600 dark:text-gray-300">Available Slots</span>
+            <span className="text-sm text-gray-600 dark:text-gray-300">
+              Available Slots
+            </span>
             <span className="text-sm font-medium text-gray-800 dark:text-white">
               {spot.availableSlots} / {spot.totalSlots}
             </span>
@@ -225,10 +239,13 @@ const ParkingCard: React.FC<ParkingCardProps> = ({ spot }) => {
           </div>
         </div>
 
-        <button className="w-full bg-teal-500
+        <button
+          className="w-full bg-teal-500
         hover:cursor-pointer
         hover:bg-teal-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-opacity-50"
-        onClick={()=>{navigate(`/bookings/${spot.id}`)}}
+          onClick={() => {
+            navigate(`/bookings/${spot.id}`);
+          }}
         >
           Book Now
         </button>

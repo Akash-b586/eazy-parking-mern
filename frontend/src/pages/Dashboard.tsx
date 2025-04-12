@@ -1,14 +1,11 @@
-import { useEffect, useState } from 'react'
-import Cookies from 'js-cookie'
-import { useNavigate } from 'react-router-dom'
-
+import {  useState } from 'react'
 import { Menu} from 'lucide-react'
 import Sidebar from '@/components/user/Sidebar'
 import DashboardContent from '@/components/user/DashboardContent'
 
 
 const Dashboard = () => {
-  const navigate = useNavigate()
+
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
 

@@ -4,9 +4,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import Profile from './Profile';
 import ChangePassword from './ChangePassword';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import { BACKEND_URL } from '@/utils/backend';
+
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -40,7 +38,7 @@ function a11yProps(index: number) {
 const Profiledata = () => {
   const [value, setValue] = React.useState(0);
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 

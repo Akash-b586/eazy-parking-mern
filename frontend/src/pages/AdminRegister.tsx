@@ -20,7 +20,7 @@ import MuiCard from '@mui/material/Card';
 import { styled } from '@mui/material/styles';
 import AppTheme from '../shared-theme/AppTheme';
 import ColorModeSelect from '../shared-theme/ColorModeSelect';
-import { GoogleIcon, FacebookIcon } from '../components/auth/CustomIcons';
+import { GoogleIcon } from '../components/auth/CustomIcons';
 import Cookies from 'js-cookie';
 
 const Card = styled(MuiCard)(({ theme }) => ({
@@ -160,7 +160,7 @@ export default function SignUp(props: { disableCustomTheme?: boolean }) {
   return (
     <AppTheme {...props}>
       <CssBaseline enableColorScheme />
-      <ColorModeSelect sx={{ position: 'fixed', top: '1rem', right: '1rem' }} />
+      <ColorModeSelect />
       <SignUpContainer direction="column" justifyContent="space-between">
         <Card variant="outlined">
           <Typography

@@ -59,6 +59,7 @@ router.post('/', auth, async (req, res) => {
                     vehicleCompanyName,
                     registrationNumber,
                     inTime: intime,
+                    status: 'IN',
                 },
             });
 
