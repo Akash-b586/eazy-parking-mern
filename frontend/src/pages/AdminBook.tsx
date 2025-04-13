@@ -1,16 +1,16 @@
-import {  useState } from 'react'
+import { useState } from "react";
 
-import { Menu} from 'lucide-react'
-import Sidebar from '@/components/admin/Sidebar'
-import DashboardContent from '@/components/admin/DashboardContent'
+import { useParams } from "react-router-dom";
 
+import { Menu } from "lucide-react";
+import Sidebar from "@/components/admin/Sidebar";
+import VehicleForm from "@/components/admin/VehicleForm";
 
-const Dashboard = () => {
+const AdminBook = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { id } = useParams();
 
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
-
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[250px_1fr] min-h-screen bg-gray-100 dark:bg-gray-950 text-gray-900 dark:text-white transition-colors duration-300">
@@ -28,12 +28,14 @@ const Dashboard = () => {
       </div>
 
       {/* Mobile Sidebar */}
-      {sidebarOpen && <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />}
+      {sidebarOpen && (
+        <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      )}
 
       {/* Main Content */}
-      <DashboardContent/>
+      <VehicleForm parkingLotId={id} />
     </div>
-  )
-}
+  );
+};
 
-export default Dashboard
+export default AdminBook;

@@ -18,6 +18,10 @@ import getdashboardDataRoute from './routes/user/dashboardData.js'
 import getuserprofileRoute from './routes/user/getuserprofile.js'
 import changePasswordRoute from './routes/user/changePassword.js'
 import userData from "./routes/admin/userData.js";
+import getAdmindashboardDataRoute from "./routes/admin/dashboard.js";
+import getAdminparkingsRoute from "./routes/admin/getParkings.js";
+import AdminbookRoute from "./routes/admin/Adminbook.js";
+
 const app = express();
 
 const PORT = 3000;
@@ -42,6 +46,10 @@ app.use("/api/admin/category", categoryRoutes);
 app.use("/api/admin/showRegisteredUsers", showRegisteredUsersRoute);
 app.use("/api/admin/generateReport", generateReportRoute);
 app.use('/api/admin/vehicle', vehicleRoutes);
+app.use("/api/admin/dashboard", getAdmindashboardDataRoute);
+app.use("/api/admin/getParkings", getAdminparkingsRoute);
+app.use("/api/admin/book", AdminbookRoute);
+
 
 app.use("/api/user/getParkings", getparkingsRoute);
 app.use("/api/user/book", bookRoute);

@@ -38,8 +38,8 @@ const Dashboard = () => {
           id: lot.id,
           image: lot.imgUrl,
           location: lot.location,
-          availableSlots: lot.totalSlot - lot.bookedSlot,
-          totalSlots: lot.totalSlot,
+          availableSlot: lot.totalSlot - lot.bookedSlot,
+          totalSlot: lot.totalSlot,
           price: `₹${lot.price}/hr`,
         }));
 

@@ -32,6 +32,7 @@ import AdminParkingLot from "./pages/AdminParkingLot";
 import { ConfigProvider, theme as antdtheme } from "antd";
 import { Toaster } from "react-hot-toast";
 import AdminregUser from "./pages/AdminregUser";
+import AdminBook from "./pages/AdminBook";
 
 const ThemeSwitcher = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -141,6 +142,14 @@ const AppContent = () => {
               }
             />
             <Route
+              path="/admin/bookings/:id"
+              element={
+                <ProtectedRoute isAuthenticated={isAdminAuthenticated}>
+                  <AdminBook />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="/admin/vehicle"
               element={
                 <ProtectedRoute isAuthenticated={isAdminAuthenticated}>
@@ -172,6 +181,7 @@ const AppContent = () => {
                 </ProtectedRoute>
               }
             />
+            
             <Route path="/logout" element={<Logout />} />
             <Route path="*" element={<div>404 Not Found</div>} />
             <Route

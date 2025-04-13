@@ -8,6 +8,9 @@ dotenv.config();
 
 router.get("/", auth, async (req, res) => {
   try {
+    if (!req.isAdmin) 
+      return res.status(403).json({ message: "Access denied" });
+
     const userData = await prisma.user.findMany({
       select: {
         id: true,

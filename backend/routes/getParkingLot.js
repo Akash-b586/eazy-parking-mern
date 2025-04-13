@@ -1,12 +1,13 @@
 import express from 'express';
 import prisma from '../prisma/client.js';
 import dotenv from 'dotenv';
+import auth from '../middlewares/auth.js';
 
 const router = express.Router();
 dotenv.config();
 
 // Get Locations Route
-router.get('/', async (req, res) => {
+router.get('/',auth, async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
         if (!token) {

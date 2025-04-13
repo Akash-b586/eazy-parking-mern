@@ -1,212 +1,158 @@
-"use client";
+import React, { useState, useEffect } from 'react';
+import { Card, Row, Col, Typography } from 'antd';
+import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { toast } from 'react-hot-toast';
+import { BACKEND_URL } from '@/utils/backend';
 
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-  Tooltip,
-  ResponsiveContainer,
-  CartesianGrid,
-} from "recharts";
-import { Card, CardContent } from "@/components/ui/card";
-import { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "@/context/ThemeContext";
-import axios from "axios";
-import dayjs from "dayjs";
-import Cookies from "js-cookie";
-import { BACKEND_URL } from "@/utils/backend";
+const { Title } = Typography;
 
-const COLORS = [
-  "#8884d8",
-  "#82ca9d",
-  "#ffc658",
-  "#ff7f50",
-  "#00C49F",
-  "#FFBB28",
-];
+interface DashboardStats {
+  totalParkingLots: number;
+  totalBookings: number;
+  totalVehiclesIn: number;
+  totalVehiclesOut: number;
+  totalVehiclesHistory: number;
+}
 
-const UserDashboard = () => {
-  const { theme } = useContext(ThemeContext);
-  const isDark = theme === "dark";
+interface OccupancyDataItem {
+  name: string;
+  value: number;
+}
 
-  const [dashboardData, setDashboardData] = useState<any>(null);
+interface TrendDataItem {
+  date: string;
+  in: number;
+  out: number;
+  history: number;
+}
+
+const DashboardContent: React.FC = () => {
+  const [stats, setStats] = useState<DashboardStats>({
+    totalParkingLots: 0,
+    totalBookings: 0,
+    totalVehiclesIn: 0,
+    totalVehiclesOut: 0,
+    totalVehiclesHistory: 0,
+  });
+
+  const [occupancyData, setOccupancyData] = useState<OccupancyDataItem[]>([]);
+  const [trendData, setTrendData] = useState<TrendDataItem[]>([]);
+  const pieColors = ['#0088FE', '#FF8042', '#00C49F'];
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
+    const token = Cookies.get('adminToken');
+    if (!token) {
+      toast.error('Admin token not found');
+      return;
+    }
+
+    const fetchAll = async () => {
       try {
-        const res = await axios.get(`${BACKEND_URL}/api/user/dashboardData`, {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("token")}`,
-          },
-        });
-        setDashboardData(res.data);
+        const [statsRes, occupancyRes, trendsRes] = await Promise.all([
+          axios.get(`${BACKEND_URL}/api/admin/dashboard/stats`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${BACKEND_URL}/api/admin/dashboard/occupancy`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(`${BACKEND_URL}/api/admin/dashboard/trends`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ]);
+
+        setStats(statsRes.data);
+        setOccupancyData(occupancyRes.data);
+        setTrendData(trendsRes.data);
       } catch (error) {
-        console.error("Error fetching dashboard data:", error);
+        toast.error('Failed to fetch dashboard data');
+        console.error(error);
       }
     };
-    fetchDashboardData();
+
+    fetchAll();
   }, []);
 
-  if (!dashboardData) return <p className="p-6">Loading...</p>;
-
-  const {
-    upcomingBooking,
-    totalBookings,
-    totalTimeParked,
-    totalSpent,
-    monthlyBookingHistory,
-    timeSpentBuckets,
-    spendingOverTime,
-  } = dashboardData;
-
-  const bookingHistory = Object.entries(monthlyBookingHistory).map(
-    ([month, bookings]) => ({ month, bookings })
-  );
-
-  const timeSpentData = Object.entries(timeSpentBuckets).map(
-    ([label, value]) => ({ name: label, value })
-  );
-
-  const pieChartFlag = timeSpentData.some((item: any) => item.value > 0);
-
-  const spendingData = Object.entries(spendingOverTime)
-    .sort(([a], [b]) => a.localeCompare(b))
-    .map(([month, value]) => ({ month, value }));
-
-  const spendingChartflag = spendingData.some((item: any) => item.value > 0);
-
-  const formattedUpcoming =
-    upcomingBooking === null
-      ? "NA"
-      : dayjs(upcomingBooking).format("DD MMM, hh:mm A");
-
   return (
-    <main className="p-6 space-y-10">
-      <h1 className="text-3xl font-bold">Welcome Back 👋</h1>
+    <div className="p-6 min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white transition-colors">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
+        <Title level={2} className="!text-black dark:!text-white">Admin Dashboard</Title>
+      </div>
 
-      {/* Stat Boxes */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[
-          { label: "Upcoming Booking", value: formattedUpcoming },
-          { label: "Total Bookings", value: totalBookings },
-          { label: "Time Parked", value: `${totalTimeParked} hrs` },
-          { label: "Total Spent", value: `$${totalSpent}` },
-        ].map(({ label, value }) => (
-          <Card
-            key={label}
-            className="rounded-2xl shadow-md hover:shadow-lg transition"
-          >
-            <CardContent className="p-6">
-              <h3 className="text-sm font-medium text-muted-foreground mb-1">
-                {label}
-              </h3>
-              <p className="text-2xl font-bold text-foreground">{value}</p>
-            </CardContent>
-          </Card>
-        ))}
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+        <Card className="dark:bg-[#1f1f1f] dark:text-white">
+          <Title level={4} className="!text-inherit">Parking Lots</Title>
+          <p className="text-2xl">{stats.totalParkingLots}</p>
+        </Card>
+        <Card className="dark:bg-[#1f1f1f] dark:text-white">
+          <Title level={4} className="!text-inherit">Bookings</Title>
+          <p className="text-2xl">{stats.totalBookings}</p>
+        </Card>
+        <Card className="dark:bg-[#1f1f1f] dark:text-white">
+          <Title level={4} className="!text-inherit">Vehicles In</Title>
+          <p className="text-2xl">{stats.totalVehiclesIn}</p>
+        </Card>
+        <Card className="dark:bg-[#1f1f1f] dark:text-white">
+          <Title level={4} className="!text-inherit">Vehicles Out</Title>
+          <p className="text-2xl">{stats.totalVehiclesOut}</p>
+        </Card>
+        <Card className="dark:bg-[#1f1f1f] dark:text-white">
+          <Title level={4} className="!text-inherit">History</Title>
+          <p className="text-2xl">{stats.totalVehiclesHistory}</p>
+        </Card>
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {/* Booking History Bar Chart */}
-        <Card className="rounded-2xl shadow-md">
-          <CardContent className="p-6">
-            <h2 className="text-lg font-semibold mb-4 text-foreground">
-              Monthly Booking History
-            </h2>
-            <ResponsiveContainer width="100%" height={250}>
-              <BarChart data={bookingHistory}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="month" stroke="currentColor" />
-                <YAxis stroke="currentColor" />
-                <Tooltip />
-                <Bar
-                  dataKey="bookings"
-                  fill={isDark ? "#60a5fa" : "#2563eb"}
-                  radius={[6, 6, 0, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+        <Card
+          title="Vehicle Occupancy"
+          className="dark:bg-[#1f1f1f] dark:text-white"
+          headStyle={{ color: 'inherit' }}
+        >
+          <ResponsiveContainer width="100%" height={300}>
+            <PieChart>
+              <Pie
+                data={occupancyData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={80}
+                label
+              >
+                {occupancyData.map((_, index) => (
+                  <Cell key={index} fill={pieColors[index % pieColors.length]} />
+                ))}
+              </Pie>
+              <Tooltip contentStyle={{ backgroundColor: '#333', borderRadius: '4px' }} />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
         </Card>
 
-        {/* Time Spent Pie Chart */}
-        <Card className="rounded-2xl shadow-md">
-          <CardContent className="p-6">
-            <h2 className="text-lg font-semibold mb-4 text-foreground">
-              Time Spent in Parking
-            </h2>
-            {!pieChartFlag ? (
-              <div className="flex justify-center items-center h-[250px]">
-                <img
-                  src="/nodata.png"
-                  alt="No data"
-                  className="w-2/3 h-60 object-contain"
-                />
-              </div>
-            ) : (
-              <ResponsiveContainer width="100%" height={250}>
-                <PieChart>
-                  <Pie
-                    data={timeSpentData}
-                    dataKey="value"
-                    nameKey="name"
-                    outerRadius={90}
-                    innerRadius={40}
-                    paddingAngle={5}
-                    label
-                  >
-                    {timeSpentData.map((_entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={COLORS[index % COLORS.length]}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip />
-                </PieChart>
-              </ResponsiveContainer>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Spending Over Time Line Chart */}
-        <Card className="rounded-2xl shadow-md">
-          <CardContent className="p-6">
-            <h2 className="text-lg font-semibold mb-4 text-foreground">
-              Spending Over Time
-            </h2>
-            {!spendingChartflag ? (
-              <p className="text-sm text-muted-foreground">No data available</p>
-            ) : (
-              <ResponsiveContainer width="100%" height={250}>
-                <LineChart data={spendingData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" stroke="currentColor" />
-                  <YAxis stroke="currentColor" />
-                  <Tooltip />
-                  <Line
-                    type="monotone"
-                    dataKey="value"
-                    stroke={isDark ? "#9333ea" : "#7c3aed"}
-                    fill={isDark ? "#9333ea55" : "#7c3aed55"}
-                    dot
-                    strokeWidth={2}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            )}
-          </CardContent>
+        <Card
+          title="Vehicle Trends"
+          className="dark:bg-[#1f1f1f] dark:text-white"
+          headStyle={{ color: 'inherit' }}
+        >
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={trendData}>
+              <XAxis dataKey="date" stroke="currentColor" />
+              <YAxis stroke="currentColor" />
+              <Tooltip contentStyle={{ backgroundColor: '#333', borderRadius: '4px' }} />
+              <Legend />
+              <Line type="monotone" dataKey="in" stroke="#0088FE" activeDot={{ r: 8 }} />
+              <Line type="monotone" dataKey="out" stroke="#FF8042" />
+              <Line type="monotone" dataKey="history" stroke="#00C49F" />
+            </LineChart>
+          </ResponsiveContainer>
         </Card>
       </div>
-    </main>
+    </div>
   );
 };
 
-export default UserDashboard;
+export default DashboardContent;

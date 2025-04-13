@@ -43,8 +43,7 @@ router.get("/upcoming", auth, async (req, res) => {
   
   
 
-//  Auto-update IN to OUT if outTime passed (triggered manually for now)
-// Auto move vehicles from IN to OUT if inTime <= now
+// move vehicles from IN to OUT if inTime <= now
 router.post("/auto-update", auth, async (req, res) => {
     try {
       if (!req.isAdmin) return res.status(403).json({ message: "Access denied" });
