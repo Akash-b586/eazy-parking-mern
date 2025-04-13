@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import Sidebar from "@/components/admin/Sidebar";
 import { ParkingCardSlider } from "../components/admin/ParkingCardSlider";
@@ -9,7 +8,6 @@ import { BACKEND_URL } from "@/utils/backend";
 import { toast } from "react-hot-toast";
 
 const AdminBookings = () => {
-  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [parkingSpots, setParkingSpots] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,7 +26,7 @@ const AdminBookings = () => {
           return;
         }
   
-        const res = await axios.get(`${BACKEND_URL}/api/admin/getParkings`, {
+        const res = await axios.get(`${BACKEND_URL}/api/user/getParkings`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

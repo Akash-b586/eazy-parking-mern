@@ -8,8 +8,8 @@ interface ParkingSpot {
   id: number;
   image: string;
   location: string;
-  availableSlots: number;
-  totalSlots: number;
+  availableSlot: number;
+  totalSlot: number;
   price: string;
 }
 
@@ -27,6 +27,7 @@ export const ParkingCardSlider: React.FC<ParkingCardSliderProps> = ({
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredSpots, setFilteredSpots] =
     useState<ParkingSpot[]>(parkingSpots);
+
   const sliderRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -194,7 +195,7 @@ interface ParkingCardProps {
 }
 
 const ParkingCard: React.FC<ParkingCardProps> = ({ spot }) => {
-  const availabilityPercentage = (spot.availableSlots / spot.totalSlots) * 100;
+  const availabilityPercentage = (spot.availableSlot / spot.totalSlot) * 100;
   const navigate = useNavigate();
   return (
     <motion.div
@@ -222,7 +223,7 @@ const ParkingCard: React.FC<ParkingCardProps> = ({ spot }) => {
               Available Slots
             </span>
             <span className="text-sm font-medium text-gray-800 dark:text-white">
-              {spot.availableSlots} / {spot.totalSlots}
+              {spot.availableSlot} / {spot.totalSlot}
             </span>
           </div>
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">

@@ -33,6 +33,8 @@ import { ConfigProvider, theme as antdtheme } from "antd";
 import { Toaster } from "react-hot-toast";
 import AdminregUser from "./pages/AdminregUser";
 import AdminBook from "./pages/AdminBook";
+import AdminSetting from "./pages/AdminSetting";
+// import AdminBookregUser from "./pages/AdminBookregUser";
 
 const ThemeSwitcher = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -133,6 +135,14 @@ const AppContent = () => {
                 </ProtectedRoute>
               }
             />
+            {/* <Route
+              path="/admin/users"
+              element={
+                <ProtectedRoute isAuthenticated={isAdminAuthenticated}>
+                  <AdminBookregUser />
+                </ProtectedRoute>
+              }
+            /> */}
             <Route
               path="/admin/bookings"
               element={
@@ -162,6 +172,14 @@ const AppContent = () => {
               element={
                 <ProtectedRoute isAuthenticated={isAdminAuthenticated}>
                   <AdminReports />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/admin/settings"
+              element={
+                <ProtectedRoute isAuthenticated={isAdminAuthenticated}>
+                  <AdminSetting />
                 </ProtectedRoute>
               }
             />

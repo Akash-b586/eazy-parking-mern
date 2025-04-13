@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Row, Col, Typography } from 'antd';
-import { PieChart, Pie, Cell, ResponsiveContainer, LineChart, Line, XAxis, YAxis, Tooltip, Legend } from 'recharts';
+import { Card, Typography } from 'antd';
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  LineChart,
+  Line,
+} from 'recharts';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { toast } from 'react-hot-toast';
@@ -28,6 +41,13 @@ interface TrendDataItem {
   history: number;
 }
 
+interface EarningsDataItem {
+  month: string;
+  earnings: number;
+}
+
+const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
 const DashboardContent: React.FC = () => {
   const [stats, setStats] = useState<DashboardStats>({
     totalParkingLots: 0,
@@ -39,6 +59,7 @@ const DashboardContent: React.FC = () => {
 
   const [occupancyData, setOccupancyData] = useState<OccupancyDataItem[]>([]);
   const [trendData, setTrendData] = useState<TrendDataItem[]>([]);
+  const [earningsData, setEarningsData] = useState<EarningsDataItem[]>([]);
   const pieColors = ['#0088FE', '#FF8042', '#00C49F'];
 
   useEffect(() => {
@@ -50,7 +71,7 @@ const DashboardContent: React.FC = () => {
 
     const fetchAll = async () => {
       try {
-        const [statsRes, occupancyRes, trendsRes] = await Promise.all([
+        const [statsRes, occupancyRes, trendsRes, earningsRes] = await Promise.all([
           axios.get(`${BACKEND_URL}/api/admin/dashboard/stats`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
@@ -60,11 +81,15 @@ const DashboardContent: React.FC = () => {
           axios.get(`${BACKEND_URL}/api/admin/dashboard/trends`, {
             headers: { Authorization: `Bearer ${token}` },
           }),
+          axios.get(`${BACKEND_URL}/api/admin/dashboard/earnings`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
         ]);
 
         setStats(statsRes.data);
         setOccupancyData(occupancyRes.data);
         setTrendData(trendsRes.data);
+        setEarningsData(earningsRes.data);
       } catch (error) {
         toast.error('Failed to fetch dashboard data');
         console.error(error);
@@ -74,11 +99,26 @@ const DashboardContent: React.FC = () => {
     fetchAll();
   }, []);
 
+  const monthTickFormatter = (value: string) => {
+    const parts = value.split('-');
+    if (parts.length === 2) {
+      const monthIndex = parseInt(parts[1], 10) - 1;
+      return monthNames[monthIndex];
+    }
+    return value;
+  };
+
+  const formatDateToDDMMYYYY = (dateStr: string) => {
+    const d = new Date(dateStr);
+    return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+  };
+
   return (
     <div className="p-6 min-h-screen bg-white text-black dark:bg-gray-900 dark:text-white transition-colors">
-      {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <Title level={2} className="!text-black dark:!text-white">Admin Dashboard</Title>
+        <Title level={2} className="!text-black dark:!text-white">
+          Admin Dashboard
+        </Title>
       </div>
 
       {/* Summary Cards */}
@@ -107,11 +147,8 @@ const DashboardContent: React.FC = () => {
 
       {/* Charts */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-        <Card
-          title="Vehicle Occupancy"
-          className="dark:bg-[#1f1f1f] dark:text-white"
-          headStyle={{ color: 'inherit' }}
-        >
+        {/* Pie Chart */}
+        <Card title="Vehicle Occupancy" className="dark:bg-[#1f1f1f] dark:text-white" styles={{ header: { color: 'inherit' } }}>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -127,27 +164,57 @@ const DashboardContent: React.FC = () => {
                   <Cell key={index} fill={pieColors[index % pieColors.length]} />
                 ))}
               </Pie>
-              <Tooltip contentStyle={{ backgroundColor: '#333', borderRadius: '4px' }} />
+              <Tooltip contentStyle={{ backgroundColor: '#333', borderRadius: '4px' }} cursor={{ fill: 'transparent' }} />
               <Legend />
             </PieChart>
           </ResponsiveContainer>
         </Card>
 
-        <Card
-          title="Vehicle Trends"
-          className="dark:bg-[#1f1f1f] dark:text-white"
-          headStyle={{ color: 'inherit' }}
-        >
+        {/* Line Chart */}
+        <Card title="Vehicle Trends" className="dark:bg-[#1f1f1f] dark:text-white" styles={{ header: { color: 'inherit' } }}>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={trendData}>
-              <XAxis dataKey="date" stroke="currentColor" />
-              <YAxis stroke="currentColor" />
+              <XAxis
+                dataKey="date"
+                stroke="currentColor"
+                tickFormatter={formatDateToDDMMYYYY}
+              />
+              <YAxis
+                stroke="currentColor"
+                label={{
+                  value: 'Vehicle Count',
+                  angle: -90,
+                  position: 'insideLeft',
+                  style: { fill: 'currentColor' },
+                }}
+              />
               <Tooltip contentStyle={{ backgroundColor: '#333', borderRadius: '4px' }} />
               <Legend />
-              <Line type="monotone" dataKey="in" stroke="#0088FE" activeDot={{ r: 8 }} />
-              <Line type="monotone" dataKey="out" stroke="#FF8042" />
-              <Line type="monotone" dataKey="history" stroke="#00C49F" />
+              <Line type="monotone" dataKey="in" name="Upcoming" stroke="#0088FE" activeDot={{ r: 8 }} />
+              <Line type="monotone" dataKey="out" name="Parked" stroke="#FF8042" />
+              <Line type="monotone" dataKey="history" name="Settled" stroke="#00C49F" />
             </LineChart>
+          </ResponsiveContainer>
+        </Card>
+
+        {/* Bar Chart */}
+        <Card title="Total Earnings (Per Month)" className="dark:bg-[#1f1f1f] dark:text-white" styles={{ header: { color: 'inherit' } }}>
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={earningsData}>
+              <XAxis dataKey="month" stroke="currentColor" tickFormatter={monthTickFormatter} />
+              <YAxis
+                stroke="currentColor"
+                label={{
+                  value: 'Earnings (₹)',
+                  angle: -90,
+                  position: 'insideLeft',
+                  style: { fill: 'currentColor' },
+                }}
+              />
+              <Tooltip contentStyle={{ backgroundColor: '#333', borderRadius: '4px' }} cursor={{ fill: 'transparent' }} />
+              <Legend />
+              <Bar dataKey="earnings" fill="#82ca9d" />
+            </BarChart>
           </ResponsiveContainer>
         </Card>
       </div>
